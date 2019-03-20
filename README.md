@@ -1,19 +1,17 @@
-# StreamlabsIntro
+# Stream Event Viewer
 
-To start your Phoenix server:
+This is a coding assignment project. I decided to build it using Elixir, and leverage BEAM VM incredible ability to parallelize. It has a rather simple architecture, does not use DB and keeps data flow as uni-directional as possible. It also uses Phoenix LiveView which was released liek 3 days ago so it runs incredibly well and doesn't use much JS.
 
-  * Install dependencies with `mix deps.get`
-  * Install Node.js dependencies with `cd assets && npm install`
-  * Start Phoenix endpoint with `mix phx.server`
+## Rough architecture
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+Every client watching a stream creates a LiveView process which alerts StreamerRouter genserver, and it checks if according twitch subscription process (Streamer process) already exists. If it does, it sends it client LiveView pid, to get notified, whenever webhook gets invoked. If it does not, it creates a new Streamer process, adds it to a routing registry and created a twitch webhook sub, which uses StreamerRouter to notify appropriate process.
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+![The diagram migth explain more.](/diagram.png?raw=true "The diagram migth explain more.")
 
-## Learn more
+## How would I deploy it to AWS?
 
-  * Official website: http://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Mailing list: http://groups.google.com/group/phoenix-talk
-  * Source: https://github.com/phoenixframework/phoenix
+I'd setup a CloudFormation to pickup code from the repo, build it into a docker container (dockerfile included) and deploy it into a k8s cluster with the same cookie. 
+
+## Where do I see bottlenecks and how would I scale following architecture
+
+I'd say it's quite fast, almost every webhook trigger on my pc takes about 300 microseconds, and approx 1ms on my weakling server. So 100 rpm shouldn't be too much of a problem, however when we start to hit the numbers of about 60k rpm I'd start thinking about horizontal scaling. Right now, the router process is not global, which poses problems of duplicate subs and slower response times. I'd use peerage to discover nodes on the network, swarn to handoff processes to another nodes, and manifold for large subscripton list notification, and sharding global router processes. This should work great even on biggest of clusters with dynamic number of nodes.
