@@ -5,7 +5,23 @@ defmodule StreamlabsIntroWeb.ApiController do
 
   def send(conn, %{"event" => event, "id" => id, "data" => data}) do
     streamer = StreamlabsIntro.StreamRouter.get(id)
-    StreamlabsIntro.Streamer.event(streamer, %{event: event, data: data})
-    conn |> json(true)
+    case event do
+      "follow" ->
+        for follow <- data do
+          StreamlabsIntro.Streamer.event(streamer,
+            "#{follow["from_name"]} just started following "
+          )
+        end
+      "status" ->
+        case data do
+          [] ->
+            StreamlabsIntro.Streamer.event(streamer,"Stream just has ended.")
+          [status] ->
+            StreamlabsIntro.Streamer.event(streamer,
+              "stream is called #{status["title"]} now"
+            )
+        end
+    end
+    conn |> text("ok")
   end
 end
