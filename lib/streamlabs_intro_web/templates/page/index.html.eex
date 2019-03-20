@@ -1,7 +1,7 @@
 <%= if @logged_in do %>
 <input placeholder="Enter streamer name here" id="stream" type="search" /> <a onclick="window.location='/stream/'+document.getElementById('stream').value" class="button">go</a>
 <% else %>
-<a href="https://id.twitch.tv/oauth2/authorize?client_id=8q5p1n7lvfv6vdiworpac5geon43sq&redirect_uri=http://localhost:4000/login&response_type=code&scope=user_read">
+<a href="https://id.twitch.tv/oauth2/authorize?client_id=8q5p1n7lvfv6vdiworpac5geon43sq&redirect_uri=<%= @redirect_url %>&response_type=code&scope=user_read">
   Login with twitch
 </a>
 <% end %>

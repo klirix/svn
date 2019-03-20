@@ -4,7 +4,11 @@ defmodule StreamlabsIntroWeb.PageController do
   alias Phoenix.LiveView
 
   def index(conn, _params) do
-    render(conn, "index.html", logged_in: get_session(conn, :logged_in))
+    base = if Mix.env() =="prod" do "http://localhost:4000" else "https://sev.askh.at" end
+    render(conn, "index.html",
+      logged_in: get_session(conn, :logged_in),
+      redirect_url: "/login"
+    )
   end
 
   def login(conn, %{"code" => code}) do
