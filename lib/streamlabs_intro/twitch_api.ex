@@ -6,8 +6,8 @@ defmodule Twitch do
   end
 
   def sub_to_streamer(id, unsub \\ false) do
-    HTTPoison.post @hub_link, sub_payload(id, "follows", unsub), headers()
-    HTTPoison.post @hub_link, sub_payload(id, "status", unsub), headers()
+    IO.inspect(HTTPoison.post @hub_link, sub_payload(id, "follows", unsub), headers())
+    IO.inspect(HTTPoison.post @hub_link, sub_payload(id, "status", unsub), headers())
   end
 
   defp headers do
