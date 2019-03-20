@@ -32,7 +32,7 @@ defmodule StreamlabsIntroWeb.ApiController do
     [hash] = conn |> get_req_header("x-hub-signature")
     hash = String.downcase(hash)
     secret = Application.get_env(:streamlabs_intro, StreamlabsIntroWeb.Endpoint)[:secret_key_base]
-    expected_hash = String.downcase("sha256="+(:crypto.hmac(:sha256, secret, body) |> Base.encode16()))
+    expected_hash = String.downcase("sha256=#{:crypto.hmac(:sha256, secret, body) |> Base.encode16()}")
     if hash == expected_hash do
       conn
     else

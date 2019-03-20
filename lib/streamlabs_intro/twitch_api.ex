@@ -23,10 +23,14 @@ defmodule Twitch do
       "status" ->
         "https://api.twitch.tv/helix/streams?user_id=#{id}"
     end
+    secret = Application.get_env(:streamlabs_intro, StreamlabsIntroWeb.Endpoint)[:secret_key_base]
+    host = Application.get_env(:streamlabs_intro, StreamlabsIntroWeb.Endpoint)[:url][:host]
     Jason.encode!(%{
-      "hub.callback" => "https://hello.dev/api/#{topic}/#{id}",
+      "hub.callback" => "https://#{host}/api/#{topic}/#{id}",
       "hub.topic" => url,
-      "hub.mode" => if unsub do "unsubscribe" else "subscribe" end
+      "hub.mode" => if unsub do "unsubscribe" else "subscribe" end,
+      "hub.lease" => if Mix.env() == "prod" do 864000 else 0 end,
+      "hub.secret" => if Mix.env() == "prod" do secret else nil end
     })
   end
 end
