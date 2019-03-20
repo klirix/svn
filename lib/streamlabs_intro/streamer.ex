@@ -13,13 +13,10 @@ defmodule StreamlabsIntro.Streamer do
 
   @impl true
   def handle_cast({:event, data}, state) do
-    IO.inspect("Got event, dispatching")
-    IO.inspect(["Streamer",data])
     for socket <- state, do: send(socket, {:stream_event, data})
     {:noreply, state}
   end
   def handle_cast({:subscribe, socket}, state) do
-    IO.puts("Streamer: being subbed to")
     {:noreply, [socket | state]}
   end
   def handle_cast({:unsubscribe, socket}, state) do
