@@ -18,19 +18,26 @@ defmodule StreamlabsIntroWeb.PageController do
     |> redirect(to: "/")
   end
 
+  @spec stream(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def stream(conn, %{"streamer" => streamer}) do
-    case Twitch.streamer_info(streamer) do
-      {:ok, %{ body: body }} ->
-        case Jason.decode(body) do
-          {:ok, %{"data" => [%{"id" => id, "login" => streamer}] }} ->
-            LiveView.Controller.live_render(conn, StreamlabsIntroWeb.StreamLive, session: %{
-              streamer: streamer, id: id
-            })
-          _ ->
-            streamer_not_found(conn)
-        end
-      _ ->
-        streamer_not_found(conn)
+    unless get_session(conn, :logged_in) do
+      conn
+      |> put_flash(:error, "Not logged in!")
+      |> redirect(to: "/")
+    else
+      case Twitch.streamer_info(streamer) do
+        {:ok, %{ body: body }} ->
+          case Jason.decode(body) do
+            {:ok, %{"data" => [%{"id" => id, "login" => streamer}] }} ->
+              LiveView.Controller.live_render(conn, StreamlabsIntroWeb.StreamLive, session: %{
+                streamer: streamer, id: id
+              })
+            _ ->
+              streamer_not_found(conn)
+          end
+        _ ->
+          streamer_not_found(conn)
+      end
     end
   end
 
