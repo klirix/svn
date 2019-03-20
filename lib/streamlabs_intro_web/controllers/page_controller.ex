@@ -7,7 +7,7 @@ defmodule StreamlabsIntroWeb.PageController do
     base = if Mix.env() =="prod" do "http://localhost:4000" else "https://sev.askh.at" end
     render(conn, "index.html",
       logged_in: get_session(conn, :logged_in),
-      redirect_url: "/login"
+      redirect_url: "#{base}/login"
     )
   end
 
