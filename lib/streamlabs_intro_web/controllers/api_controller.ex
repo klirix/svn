@@ -1,19 +1,18 @@
 defmodule StreamlabsIntroWeb.ApiController do
   use StreamlabsIntroWeb, :controller
 
-  plug :check_hash when action in [:send]
+  # plug :check_hash when action in [:send]
 
   def confirm(conn, %{ "hub.challenge" => ch }), do: text(conn, ch)
 
   def send(conn, %{"event" => event, "id" => id, "data" => data}) do
     streamer = StreamlabsIntro.StreamRouter.get(id)
+    IO.inspect(data)
     case event do
-      "follow" ->
-        for follow <- data do
-          StreamlabsIntro.Streamer.event(streamer,
-            "#{follow["from_name"]} just started following "
+      "follows" ->
+        StreamlabsIntro.Streamer.event(streamer,
+            "#{data["from_id"]} just started following "
           )
-        end
       "status" ->
         case data do
           [] ->
@@ -29,6 +28,7 @@ defmodule StreamlabsIntroWeb.ApiController do
 
   defp check_hash(conn, _) do
     {:ok, body, _} =  conn |> read_body()
+    IO.inspect(conn)
     [hash] = conn |> get_req_header("x-hub-signature")
     hash = String.downcase(hash)
     secret = Application.get_env(:streamlabs_intro, StreamlabsIntroWeb.Endpoint)[:secret_key_base]

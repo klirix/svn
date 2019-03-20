@@ -12,7 +12,8 @@ defmodule Twitch do
 
   defp headers do
     [
-      "Client-ID": "8q5p1n7lvfv6vdiworpac5geon43sq"
+      "Client-ID": "8q5p1n7lvfv6vdiworpac5geon43sq",
+      "Content-Type": "application/json"
     ]
   end
 
@@ -29,7 +30,7 @@ defmodule Twitch do
       "hub.callback" => "https://#{host}/api/#{topic}/#{id}",
       "hub.topic" => url,
       "hub.mode" => if unsub do "unsubscribe" else "subscribe" end,
-      "hub.lease" => if Mix.env() == "prod" do 864000 else 0 end,
+      "hub.lease_seconds" => if Mix.env() == "prod" do 864000 else 0 end,
       "hub.secret" => if Mix.env() == "prod" do secret else nil end
     })
   end

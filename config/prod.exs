@@ -13,7 +13,7 @@ config :streamlabs_intro, StreamlabsIntroWeb.Endpoint,
   http: [:inet6, port: System.get_env("PORT") || 80],
   url: [host: "sev.askh.at", port: 80],
   secret_key_base: System.get_env("KEY") || "rVbAA/aEWhO7RiOUn03C9zh+iRgh3sBWv2Jf0XGgMDM7oogja6h89XEHArH3UPYD",
-  cache_static_manifest: "priv/static/cache_manifest.json",
+  cache_static_manifest: "priv/static/cache_manifest.json"
 
 # Do not print debug messages in production
 config :logger, level: :info
