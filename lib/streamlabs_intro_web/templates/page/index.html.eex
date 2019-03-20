@@ -1,0 +1,7 @@
+<%= if @logged_in do %>
+<input type="search" /> <a class="button">go</a>
+<% else %>
+<a href="https://id.twitch.tv/oauth2/authorize?client_id=8q5p1n7lvfv6vdiworpac5geon43sq&redirect_uri=http://localhost:4000/login&response_type=code&scope=user_read">
+  Login with twitch
+</a>
+<% end %>
