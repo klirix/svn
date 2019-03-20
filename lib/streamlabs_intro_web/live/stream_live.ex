@@ -15,7 +15,7 @@ defmodule StreamlabsIntroWeb.StreamLive do
           <div>
             <h2> Events: </h2>
             <%= for event <- @events do %>
-            <p><%= Jason.encode!(event) %></p>
+            <p><%= event %></p>
             <% end %>
           </div>
         </div>
@@ -37,6 +37,6 @@ defmodule StreamlabsIntroWeb.StreamLive do
 
   def handle_info({:stream_event, event}, socket) do
     IO.inspect(["Client", event])
-    {:noreply, update(socket, :events, &([event | &1]))}
+    {:noreply, update(socket, :events, &(Enum.take([event | &1], 10)))}
   end
 end
