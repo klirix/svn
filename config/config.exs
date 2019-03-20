@@ -7,6 +7,8 @@
 # General application configuration
 use Mix.Config
 
+
+
 # Configures the endpoint
 config :streamlabs_intro, StreamlabsIntroWeb.Endpoint,
   url: [host: "localhost"],
@@ -14,7 +16,7 @@ config :streamlabs_intro, StreamlabsIntroWeb.Endpoint,
   render_errors: [view: StreamlabsIntroWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: StreamlabsIntro.PubSub, adapter: Phoenix.PubSub.PG2],
   live_view: [
-    signing_salt: "SECRET_SALT"
+    signing_salt: System.get_env("KEY") || "SECRET_SALT"
   ]
 
 # Configures Elixir's Logger

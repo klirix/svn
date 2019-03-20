@@ -1,0 +1,9 @@
+{
+    "name": "sev",
+    "domain": "sev.askh.at",
+    "env": {
+        "KEY": "@sev_key",
+        "MIX_ENV": "prod",
+        "APP_VSN": "1"
+    }
+}
