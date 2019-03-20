@@ -2,6 +2,12 @@
 
 This is a coding assignment project. I decided to build it using Elixir, and leverage BEAM VM incredible ability to parallelize. It has a rather simple architecture, does not use DB and keeps data flow as uni-directional as possible. It also uses Phoenix LiveView which was released liek 3 days ago so it runs incredibly well and doesn't use much JS.
 
+Live over at [https://sev.askh.at](https://sev.askh.at)
+
+## Major issues
+
+- Doesn't check for right signature
+
 ## Rough architecture
 
 Every client watching a stream creates a LiveView process which alerts StreamerRouter genserver, and it checks if according twitch subscription process (Streamer process) already exists. If it does, it sends it client LiveView pid, to get notified, whenever webhook gets invoked. If it does not, it creates a new Streamer process, adds it to a routing registry and created a twitch webhook sub, which uses StreamerRouter to notify appropriate process.
