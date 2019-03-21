@@ -16,7 +16,7 @@ Every client watching a stream creates a LiveView process which alerts StreamerR
 
 ## How would I deploy it to AWS?
 
-I'd setup a CloudFormation to pickup code from the repo, build it into a docker container (dockerfile included) and deploy it into a k8s cluster with traefik reverse proxy with the same cookie. 
+I'd setup a CloudFormation to pickup code from the repo, build it into a docker container (dockerfile included, though not the most robust one) and deploy it into a k8s cluster with traefik reverse proxy with the same erlang cookie. 
 
 ## Where do I see bottlenecks and how would I scale following architecture
 
